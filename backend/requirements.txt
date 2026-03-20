@@ -1,0 +1,33 @@
+# Core Django
+Django==4.2.29
+djangorestframework==3.15.1
+djangorestframework-simplejwt==5.3.1
+django-cors-headers==4.3.1
+django-filter==23.5
+
+# Database
+psycopg2-binary==2.9.9
+
+# Async / Task Queue
+celery==5.3.6
+redis==5.0.3
+django-celery-results==2.5.1
+django-celery-beat==2.6.0
+
+# AI / Machine Learning
+transformers==4.48.1
+torch==2.6.0
+sentencepiece==0.2.1
+scikit-learn==1.4.2
+pandas==2.2.1
+numpy==1.26.4
+
+# Utilities
+python-decouple==3.8
+Pillow==12.1.1
+gunicorn==23.0.0
+whitenoise==6.6.0
+
+# Development
+pytest-django==4.8.0
+factory-boy==3.3.0
