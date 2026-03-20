@@ -4,10 +4,11 @@
 
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Ticket, BarChart3, LogOut, Bell, Menu } from 'lucide-react'
+import { LayoutDashboard, Ticket, BarChart3, LogOut, Menu, Settings } from 'lucide-react'
 import useAuthStore from '../store/authStore'
 import ThemeToggle from './ui/ThemeToggle'
 import MobileMenu from './MobileMenu'
+import NotificationDropdown from './NotificationDropdown'
 
 export default function Navbar() {
   const { user, logout } = useAuthStore()
@@ -71,17 +72,19 @@ export default function Navbar() {
           {/* Right side actions */}
           <div className="flex items-center gap-2">
             {/* Notifications */}
-            <button
-              className="relative p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-hover rounded-xl transition-colors"
-              title="Notifications"
-            >
-              <Bell className="w-5 h-5" />
-              {/* Notification badge */}
-              <span className="absolute top-1 right-1 w-2 h-2 bg-error-500 rounded-full"></span>
-            </button>
+            <NotificationDropdown />
 
             {/* Theme toggle */}
             <ThemeToggle />
+
+            {/* Settings */}
+            <Link
+              to="/settings"
+              className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-hover rounded-xl transition-colors"
+              title="Settings"
+            >
+              <Settings className="w-5 h-5" />
+            </Link>
 
             {/* User menu */}
             <Link

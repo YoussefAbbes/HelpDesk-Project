@@ -19,6 +19,11 @@ class User(AbstractUser):
         AGENT = 'AGENT', 'Agent'
         ADMIN = 'ADMIN', 'Admin'
 
+    class Theme(models.TextChoices):
+        LIGHT = 'LIGHT', 'Light'
+        DARK = 'DARK', 'Dark'
+        SYSTEM = 'SYSTEM', 'System'
+
     role = models.CharField(
         max_length=10,
         choices=Role.choices,
@@ -31,6 +36,16 @@ class User(AbstractUser):
     )
     department = models.CharField(max_length=100, blank=True)
     bio = models.TextField(blank=True)
+    theme_preference = models.CharField(
+        max_length=10,
+        choices=Theme.choices,
+        default=Theme.SYSTEM,
+        help_text='User theme preference (light, dark, or system default)',
+    )
+    email_notifications = models.BooleanField(
+        default=True,
+        help_text='Whether to send email notifications to the user',
+    )
 
     # Timestamps managed by AbstractUser (date_joined, last_login)
 

@@ -14,8 +14,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from users.permissions import IsAgentOrAdmin, IsOwnerOrAgentOrAdmin
-from .models import Message, Tag, Ticket
+from .models import Attachment, Message, Tag, Ticket
 from .serializers import (
+    AttachmentSerializer,
     MessageSerializer,
     TagSerializer,
     TicketDetailSerializer,
@@ -132,3 +133,71 @@ class TagListCreateView(generics.ListCreateAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = [permissions.IsAuthenticated, IsAgentOrAdmin]
+
+
+class AttachmentListCreateView(generics.ListCreateAPIView):
+    """
+    GET  /api/v1/tickets/<ticket_id>/attachments/
+    POST /api/v1/tickets/<ticket_id>/attachments/
+    """
+
+    serializer_class = AttachmentSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrAgentOrAdmin]
+
+    def get_queryset(self):
+        """Return attachments for the specified ticket."""
+        return Attachment.objects.filter(
+            ticket_id=self.kwargs['ticket_id']
+        ).select_related('uploaded_by', 'ticket')
+
+    def perform_create(self, serializer):
+        """Save attachment with ticket and uploader."""
+        ticket = Ticket.objects.get(pk=self.kwargs['ticket_id'])
+
+        # Get optional message_id from request data
+        message_id = self.request.data.get('message_id')
+        message = None
+        if message_id:
+            try:
+                message = Message.objects.get(pk=message_id, ticket=ticket)
+            except Message.DoesNotExist:
+                pass
+
+        # Extract file metadata
+        uploaded_file = self.request.FILES.get('file')
+        if uploaded_file:
+            serializer.save(
+                uploaded_by=self.request.user,
+                ticket=ticket,
+                message=message,
+                original_filename=uploaded_file.name,
+                file_size=uploaded_file.size,
+                content_type=uploaded_file.content_type,
+            )
+        else:
+            serializer.save(
+                uploaded_by=self.request.user,
+                ticket=ticket,
+                message=message,
+            )
+
+
+class AttachmentDetailView(generics.RetrieveDestroyAPIView):
+    """GET/DELETE /api/v1/attachments/<id>/"""
+
+    serializer_class = AttachmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        """Return all attachments, but permission checks ensure proper access."""
+        return Attachment.objects.select_related('uploaded_by', 'ticket')
+
+    def perform_destroy(self, instance):
+        """Only the uploader or admin can delete an attachment."""
+        user = self.request.user
+        if user == instance.uploaded_by or user.is_admin_user:
+            instance.delete()
+        else:
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied('Only the uploader or admin can delete this attachment.')
+

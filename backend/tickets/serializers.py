@@ -4,13 +4,39 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from users.serializers import UserSerializer
-from .models import Message, Tag, Ticket
+from .models import Attachment, Message, Tag, Ticket
 
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name']
+
+
+class AttachmentSerializer(serializers.ModelSerializer):
+    """Serializes file attachments for tickets and messages."""
+
+    uploaded_by = UserSerializer(read_only=True)
+    file_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Attachment
+        fields = [
+            'id', 'ticket', 'message', 'uploaded_by',
+            'file', 'file_url', 'original_filename',
+            'file_size', 'content_type', 'created_at',
+        ]
+        read_only_fields = [
+            'id', 'uploaded_by', 'file_size',
+            'original_filename', 'content_type', 'created_at',
+        ]
+
+    def get_file_url(self, obj):
+        """Return the full URL to the file."""
+        request = self.context.get('request')
+        if obj.file and request:
+            return request.build_absolute_uri(obj.file.url)
+        return None
 
 
 class MessageSerializer(serializers.ModelSerializer):
@@ -65,6 +91,7 @@ class TicketDetailSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
     assigned_to = UserSerializer(read_only=True)
     messages = MessageSerializer(many=True, read_only=True)
+    attachments = AttachmentSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     tag_ids = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(),
@@ -83,7 +110,7 @@ class TicketDetailSerializer(serializers.ModelSerializer):
             'ai_suggested_reply', 'ai_processed',
             'created_by', 'assigned_to',
             'tags', 'tag_ids',
-            'messages',
+            'messages', 'attachments',
             'first_response_at', 'resolved_at', 'resolution_time_hours',
             'created_at', 'updated_at',
         ]
