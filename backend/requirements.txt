@@ -1,5 +1,5 @@
 # Core Django
-Django==4.2.11
+Django==4.2.29
 djangorestframework==3.15.1
 djangorestframework-simplejwt==5.3.1
 django-cors-headers==4.3.1
@@ -15,17 +15,17 @@ django-celery-results==2.5.1
 django-celery-beat==2.6.0
 
 # AI / Machine Learning
-transformers==4.39.3
-torch==2.2.2
-sentencepiece==0.2.0
+transformers==4.48.1
+torch==2.6.0
+sentencepiece==0.2.1
 scikit-learn==1.4.2
 pandas==2.2.1
 numpy==1.26.4
 
 # Utilities
 python-decouple==3.8
-Pillow==10.2.0
-gunicorn==21.2.0
+Pillow==11.1.0
+gunicorn==23.0.0
 whitenoise==6.6.0
 
 # Development
