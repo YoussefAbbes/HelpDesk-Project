@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'tickets',
     'analytics',
     'ai_core',
+    'notifications',
 ]
 
 MIDDLEWARE = [

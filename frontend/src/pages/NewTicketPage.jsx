@@ -40,8 +40,8 @@ export default function NewTicketPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Submit a New Ticket</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Submit a New Ticket</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           Our AI will automatically categorize and analyze your ticket.
         </p>
       </div>
@@ -49,7 +49,7 @@ export default function NewTicketPage() {
       <div className="card">
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Subject <span className="text-red-500">*</span>
             </label>
             <input
@@ -59,11 +59,11 @@ export default function NewTicketPage() {
               placeholder="e.g. Cannot log in to my account"
               maxLength={255}
             />
-            {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
+            {errors.title && <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.title}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Description <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -74,12 +74,12 @@ export default function NewTicketPage() {
               placeholder="Please describe your issue in detail…"
             />
             {errors.description && (
-              <p className="text-red-500 text-xs mt-1">{errors.description}</p>
+              <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.description}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
             <select
               value={form.priority}
               onChange={(e) => setForm({ ...form, priority: e.target.value })}
@@ -108,9 +108,9 @@ export default function NewTicketPage() {
       </div>
 
       {/* AI info banner */}
-      <div className="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-xl text-sm text-purple-800">
-        <strong>🤖 AI-powered analysis:</strong> Once submitted, our AI will automatically
-        detect the category, sentiment, and draft a suggested reply for the support team — 
+      <div className="mt-4 p-4 bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800 rounded-xl text-sm text-purple-800 dark:text-purple-300">
+        <strong>AI-powered analysis:</strong> Once submitted, our AI will automatically
+        detect the category, sentiment, and draft a suggested reply for the support team —
         all processed in the background without delays.
       </div>
     </div>

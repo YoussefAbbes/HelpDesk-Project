@@ -65,14 +65,14 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent / open tickets */}
-      <h2 className="text-lg font-semibold text-gray-800 mb-4">
+      <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
         {user?.role === 'AGENT' ? 'Open Tickets' : 'Recent Tickets'}
       </h2>
 
       {tickets.length === 0 ? (
-        <div className="text-center py-12 text-gray-400">
+        <div className="text-center py-12 text-gray-400 dark:text-gray-500">
           <p>No tickets yet.</p>
-          <Link to="/tickets/new" className="text-primary-600 hover:underline text-sm mt-2 inline-block">
+          <Link to="/tickets/new" className="text-primary-600 dark:text-primary-400 hover:underline text-sm mt-2 inline-block">
             Submit your first ticket →
           </Link>
         </div>
@@ -82,7 +82,7 @@ export default function DashboardPage() {
             <TicketCard key={ticket.id} ticket={ticket} />
           ))}
           {tickets.length > 10 && (
-            <Link to="/tickets" className="block text-center text-primary-600 hover:underline text-sm mt-2">
+            <Link to="/tickets" className="block text-center text-primary-600 dark:text-primary-400 hover:underline text-sm mt-2">
               View all {tickets.length} tickets →
             </Link>
           )}

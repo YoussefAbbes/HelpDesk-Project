@@ -83,7 +83,7 @@ export default function AnalyticsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Business Intelligence Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Business Intelligence Dashboard</h1>
         <button onClick={loadAll} className="btn-secondary text-sm">Refresh</button>
       </div>
 
@@ -143,14 +143,14 @@ export default function AnalyticsPage() {
         {/* Ticket volume trend */}
         <div className="card lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-gray-800">Ticket Volume</h2>
+            <h2 className="font-semibold text-gray-800 dark:text-gray-100">Ticket Volume</h2>
             <div className="flex gap-2">
               {[7, 30, 90].map((d) => (
                 <button
                   key={d}
                   onClick={() => setTrendDays(d)}
                   className={`text-xs px-2 py-1 rounded ${
-                    trendDays === d ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600'
+                    trendDays === d ? 'bg-primary-600 text-white' : 'bg-gray-100 dark:bg-dark-hover text-gray-600 dark:text-gray-300'
                   }`}
                 >
                   {d}d
@@ -161,9 +161,9 @@ export default function AnalyticsPage() {
           {trends?.data?.length > 0 ? (
             <ResponsiveContainer width="100%" height={250}>
               <LineChart data={trends.data}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="period" tick={{ fontSize: 11 }} />
-                <YAxis tick={{ fontSize: 11 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" className="dark:stroke-gray-700" />
+                <XAxis dataKey="period" tick={{ fontSize: 11 }} className="dark:fill-gray-400" />
+                <YAxis tick={{ fontSize: 11 }} className="dark:fill-gray-400" />
                 <Tooltip />
                 <Legend />
                 <Line
@@ -185,13 +185,13 @@ export default function AnalyticsPage() {
               </LineChart>
             </ResponsiveContainer>
           ) : (
-            <p className="text-gray-400 text-sm text-center py-8">No data for this period.</p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm text-center py-8">No data for this period.</p>
           )}
         </div>
 
         {/* Sentiment distribution */}
         <div className="card">
-          <h2 className="font-semibold text-gray-800 mb-4">Sentiment Distribution</h2>
+          <h2 className="font-semibold text-gray-800 dark:text-gray-100 mb-4">Sentiment Distribution</h2>
           {sentimentPieData.length > 0 ? (
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
@@ -215,7 +215,7 @@ export default function AnalyticsPage() {
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <p className="text-gray-400 text-sm text-center py-8">
+            <p className="text-gray-400 dark:text-gray-500 text-sm text-center py-8">
               No AI-processed tickets yet.
             </p>
           )}
@@ -226,13 +226,13 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Resolution time by category */}
         <div className="card">
-          <h2 className="font-semibold text-gray-800 mb-4">Avg. Resolution Time (hours) by Category</h2>
+          <h2 className="font-semibold text-gray-800 dark:text-gray-100 mb-4">Avg. Resolution Time (hours) by Category</h2>
           {resolutionBarData.length > 0 ? (
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={resolutionBarData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="category" tick={{ fontSize: 11 }} />
-                <YAxis tick={{ fontSize: 11 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" className="dark:stroke-gray-700" />
+                <XAxis dataKey="category" tick={{ fontSize: 11 }} className="dark:fill-gray-400" />
+                <YAxis tick={{ fontSize: 11 }} className="dark:fill-gray-400" />
                 <Tooltip formatter={(v) => [`${v}h`, 'Avg. Resolution']} />
                 <Bar dataKey="avg_hours" name="Avg Hours">
                   {resolutionBarData.map((_, index) => (
@@ -242,17 +242,17 @@ export default function AnalyticsPage() {
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <p className="text-gray-400 text-sm text-center py-8">No resolved tickets yet.</p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm text-center py-8">No resolved tickets yet.</p>
           )}
         </div>
 
         {/* Agent performance table */}
         <div className="card overflow-auto">
-          <h2 className="font-semibold text-gray-800 mb-4">Agent Performance</h2>
+          <h2 className="font-semibold text-gray-800 dark:text-gray-100 mb-4">Agent Performance</h2>
           {agents?.agents?.length > 0 ? (
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-xs text-gray-500 border-b">
+                <tr className="text-left text-xs text-gray-500 dark:text-gray-400 border-b dark:border-dark-border">
                   <th className="pb-2">Agent</th>
                   <th className="pb-2 text-right">Open</th>
                   <th className="pb-2 text-right">Resolved</th>
@@ -261,11 +261,11 @@ export default function AnalyticsPage() {
               </thead>
               <tbody>
                 {agents.agents.map((agent) => (
-                  <tr key={agent.id} className="border-b border-gray-50 hover:bg-gray-50">
-                    <td className="py-2 font-medium">{agent.username}</td>
-                    <td className="py-2 text-right text-orange-600">{agent.open_count}</td>
-                    <td className="py-2 text-right text-green-600">{agent.resolved_count}</td>
-                    <td className="py-2 text-right text-gray-600">
+                  <tr key={agent.id} className="border-b border-gray-50 dark:border-dark-border hover:bg-gray-50 dark:hover:bg-dark-hover">
+                    <td className="py-2 font-medium text-gray-900 dark:text-gray-100">{agent.username}</td>
+                    <td className="py-2 text-right text-orange-600 dark:text-orange-400">{agent.open_count}</td>
+                    <td className="py-2 text-right text-green-600 dark:text-green-400">{agent.resolved_count}</td>
+                    <td className="py-2 text-right text-gray-600 dark:text-gray-400">
                       {agent.avg_resolution_hours !== null
                         ? `${agent.avg_resolution_hours}h`
                         : '—'}
@@ -275,7 +275,7 @@ export default function AnalyticsPage() {
               </tbody>
             </table>
           ) : (
-            <p className="text-gray-400 text-sm text-center py-8">No agent data yet.</p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm text-center py-8">No agent data yet.</p>
           )}
         </div>
       </div>

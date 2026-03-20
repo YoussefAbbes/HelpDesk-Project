@@ -178,3 +178,55 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Attachment(models.Model):
+    """File attachment for tickets and messages."""
+
+    ticket = models.ForeignKey(
+        Ticket,
+        on_delete=models.CASCADE,
+        related_name='attachments',
+        help_text='The ticket this file is attached to.',
+    )
+    message = models.ForeignKey(
+        Message,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='attachments',
+        help_text='The message this file is attached to (optional).',
+    )
+    uploaded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='uploaded_attachments',
+    )
+    file = models.FileField(upload_to='attachments/%Y/%m/')
+    original_filename = models.CharField(
+        max_length=255,
+        help_text='Original filename as uploaded by user.',
+    )
+    file_size = models.PositiveIntegerField(
+        help_text='File size in bytes.',
+    )
+    content_type = models.CharField(
+        max_length=100,
+        help_text='MIME type of the file.',
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.original_filename} (Ticket #{self.ticket_id})'
+
+    def save(self, *args, **kwargs):
+        """Auto-populate file_size and original_filename if not set."""
+        if self.file and not self.file_size:
+            self.file_size = self.file.size
+        if self.file and not self.original_filename:
+            self.original_filename = self.file.name
+        super().save(*args, **kwargs)
+

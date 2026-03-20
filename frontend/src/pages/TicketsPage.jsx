@@ -42,10 +42,10 @@ export default function TicketsPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
             {user?.role === 'CUSTOMER' ? 'My Tickets' : 'All Tickets'}
           </h1>
-          <p className="text-sm text-gray-500 mt-1">{pagination.count} total</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{pagination.count} total</p>
         </div>
         <Link to="/tickets/new" className="btn-primary flex items-center gap-2">
           <Plus className="w-4 h-4" />
@@ -68,7 +68,7 @@ export default function TicketsPage() {
           </div>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`btn-secondary flex items-center gap-2 ${showFilters ? 'bg-gray-100' : ''}`}
+            className={`btn-secondary flex items-center gap-2 ${showFilters ? 'bg-gray-100 dark:bg-dark-hover' : ''}`}
           >
             <Filter className="w-4 h-4" />
             Filters
@@ -82,9 +82,9 @@ export default function TicketsPage() {
         </div>
 
         {showFilters && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-4 border-t border-gray-100">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-4 border-t border-gray-100 dark:border-dark-border">
             <div>
-              <label className="text-xs font-medium text-gray-600 mb-1 block">Status</label>
+              <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Status</label>
               <select
                 value={filters.status}
                 onChange={(e) => handleFilter('status', e.target.value)}
@@ -96,7 +96,7 @@ export default function TicketsPage() {
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-600 mb-1 block">Priority</label>
+              <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Priority</label>
               <select
                 value={filters.priority}
                 onChange={(e) => handleFilter('priority', e.target.value)}
@@ -111,7 +111,7 @@ export default function TicketsPage() {
             {user?.role !== 'CUSTOMER' && (
               <>
                 <div>
-                  <label className="text-xs font-medium text-gray-600 mb-1 block">AI Category</label>
+                  <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">AI Category</label>
                   <select
                     value={filters.ai_category}
                     onChange={(e) => handleFilter('ai_category', e.target.value)}
@@ -123,7 +123,7 @@ export default function TicketsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-gray-600 mb-1 block">Sentiment</label>
+                  <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Sentiment</label>
                   <select
                     value={filters.ai_sentiment}
                     onChange={(e) => handleFilter('ai_sentiment', e.target.value)}
@@ -144,9 +144,9 @@ export default function TicketsPage() {
       {isLoading ? (
         <LoadingSpinner className="py-16" />
       ) : tickets.length === 0 ? (
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16 text-gray-400 dark:text-gray-500">
           <p className="text-lg">No tickets found.</p>
-          <Link to="/tickets/new" className="text-primary-600 hover:underline text-sm mt-2 inline-block">
+          <Link to="/tickets/new" className="text-primary-600 dark:text-primary-400 hover:underline text-sm mt-2 inline-block">
             Create your first ticket →
           </Link>
         </div>

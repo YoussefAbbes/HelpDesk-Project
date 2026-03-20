@@ -39,11 +39,12 @@ def _get_sentiment_pipeline():
     """Load the sentiment analysis pipeline (cached per worker process)."""
     try:
         from transformers import pipeline
+        import os
+        os.environ['TRANSFORMERS_CACHE'] = settings.AI_MODELS_CACHE_DIR
         logger.info('Loading sentiment model: %s', settings.AI_SENTIMENT_MODEL)
         return pipeline(
             'sentiment-analysis',
             model=settings.AI_SENTIMENT_MODEL,
-            cache_dir=settings.AI_MODELS_CACHE_DIR,
             truncation=True,
             max_length=512,
         )
@@ -57,11 +58,12 @@ def _get_category_pipeline():
     """Load the zero-shot classification pipeline (cached per worker process)."""
     try:
         from transformers import pipeline
+        import os
+        os.environ['TRANSFORMERS_CACHE'] = settings.AI_MODELS_CACHE_DIR
         logger.info('Loading category model: %s', settings.AI_CATEGORY_MODEL)
         return pipeline(
             'zero-shot-classification',
             model=settings.AI_CATEGORY_MODEL,
-            cache_dir=settings.AI_MODELS_CACHE_DIR,
         )
     except Exception as exc:
         logger.error('Failed to load category model: %s', exc)
@@ -73,11 +75,12 @@ def _get_reply_pipeline():
     """Load the text2text generation pipeline (cached per worker process)."""
     try:
         from transformers import pipeline
+        import os
+        os.environ['TRANSFORMERS_CACHE'] = settings.AI_MODELS_CACHE_DIR
         logger.info('Loading reply generation model: %s', settings.AI_REPLY_MODEL)
         return pipeline(
             'text2text-generation',
             model=settings.AI_REPLY_MODEL,
-            cache_dir=settings.AI_MODELS_CACHE_DIR,
             max_new_tokens=200,
         )
     except Exception as exc:

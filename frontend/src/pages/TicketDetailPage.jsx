@@ -93,8 +93,8 @@ export default function TicketDetailPage() {
       <div className="card mb-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            <h1 className="text-xl font-bold text-gray-900">{ticket.title}</h1>
-            <p className="text-sm text-gray-500 mt-1">
+            <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">{ticket.title}</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
               #{ticket.id} · Submitted by{' '}
               <strong>{ticket.created_by?.username}</strong> ·{' '}
               {formatDistanceToNow(new Date(ticket.created_at), { addSuffix: true })}
@@ -109,7 +109,7 @@ export default function TicketDetailPage() {
                 />
               )}
               {ticket.ai_category && (
-                <span className="badge bg-indigo-50 text-indigo-700">
+                <span className="badge bg-indigo-50 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300">
                   {ticket.ai_category.replace('_', ' ')}
                 </span>
               )}
@@ -138,7 +138,7 @@ export default function TicketDetailPage() {
               </button>
               <button
                 onClick={handleDelete}
-                className="btn-secondary text-red-600 hover:bg-red-50 py-1 px-2"
+                className="btn-secondary text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 py-1 px-2"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -147,7 +147,7 @@ export default function TicketDetailPage() {
         </div>
 
         {/* Description */}
-        <div className="mt-4 p-4 bg-gray-50 rounded-lg text-sm text-gray-700 whitespace-pre-wrap">
+        <div className="mt-4 p-4 bg-gray-50 dark:bg-dark-hover rounded-lg text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
           {ticket.description}
         </div>
       </div>
@@ -155,10 +155,10 @@ export default function TicketDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Messages thread */}
         <div className="lg:col-span-2 space-y-4">
-          <h2 className="font-semibold text-gray-800">Messages ({messages.length})</h2>
+          <h2 className="font-semibold text-gray-800 dark:text-gray-100">Messages ({messages.length})</h2>
 
           {messages.length === 0 && (
-            <p className="text-gray-400 text-sm">No messages yet.</p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm">No messages yet.</p>
           )}
 
           {messages.map((msg) => (
@@ -166,29 +166,29 @@ export default function TicketDetailPage() {
               key={msg.id}
               className={`rounded-xl p-4 ${
                 msg.is_internal
-                  ? 'bg-yellow-50 border border-yellow-200'
+                  ? 'bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800'
                   : msg.author.id === user?.id
-                  ? 'bg-primary-50 border border-primary-100'
-                  : 'bg-white border border-gray-200'
+                  ? 'bg-primary-50 dark:bg-primary-900/20 border border-primary-100 dark:border-primary-800'
+                  : 'bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border'
               }`}
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-sm">{msg.author.username}</span>
-                  <span className="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">
+                  <span className="font-medium text-sm text-gray-900 dark:text-gray-100">{msg.author.username}</span>
+                  <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-1.5 py-0.5 rounded">
                     {msg.author.role}
                   </span>
                   {msg.is_internal && (
-                    <span className="flex items-center gap-1 text-xs text-yellow-700 font-medium">
+                    <span className="flex items-center gap-1 text-xs text-yellow-700 dark:text-yellow-400 font-medium">
                       <Lock className="w-3 h-3" /> Internal
                     </span>
                   )}
                 </div>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-gray-400 dark:text-gray-500">
                   {format(new Date(msg.created_at), 'MMM d, HH:mm')}
                 </span>
               </div>
-              <p className="text-sm text-gray-700 whitespace-pre-wrap">{msg.body}</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{msg.body}</p>
             </div>
           ))}
 
@@ -203,7 +203,7 @@ export default function TicketDetailPage() {
             />
             <div className="flex items-center justify-between">
               {isAgentOrAdmin && (
-                <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={isInternal}
@@ -230,17 +230,17 @@ export default function TicketDetailPage() {
         <div className="space-y-4">
           {/* AI Suggested Reply */}
           {isAgentOrAdmin && ticket.ai_suggested_reply && (
-            <div className="card bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200">
+            <div className="card bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/30 dark:to-indigo-900/30 border-purple-200 dark:border-purple-800">
               <div className="flex items-center gap-2 mb-3">
-                <Bot className="w-5 h-5 text-purple-600" />
-                <h3 className="font-semibold text-purple-900 text-sm">AI Suggested Reply</h3>
+                <Bot className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <h3 className="font-semibold text-purple-900 dark:text-purple-300 text-sm">AI Suggested Reply</h3>
               </div>
-              <p className="text-sm text-gray-700 whitespace-pre-wrap">
+              <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                 {ticket.ai_suggested_reply}
               </p>
               <button
                 onClick={() => setNewMessage(ticket.ai_suggested_reply)}
-                className="mt-3 text-xs text-purple-600 hover:underline font-medium"
+                className="mt-3 text-xs text-purple-600 dark:text-purple-400 hover:underline font-medium"
               >
                 Use this reply →
               </button>
@@ -249,30 +249,30 @@ export default function TicketDetailPage() {
 
           {/* Ticket metadata */}
           <div className="card">
-            <h3 className="font-semibold text-gray-800 text-sm mb-3">Ticket Details</h3>
+            <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-sm mb-3">Ticket Details</h3>
             <dl className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-gray-500">Assigned to</dt>
-                <dd className="font-medium">{ticket.assigned_to?.username || 'Unassigned'}</dd>
+                <dt className="text-gray-500 dark:text-gray-400">Assigned to</dt>
+                <dd className="font-medium text-gray-900 dark:text-gray-100">{ticket.assigned_to?.username || 'Unassigned'}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-gray-500">Created</dt>
-                <dd>{format(new Date(ticket.created_at), 'MMM d, yyyy')}</dd>
+                <dt className="text-gray-500 dark:text-gray-400">Created</dt>
+                <dd className="text-gray-900 dark:text-gray-100">{format(new Date(ticket.created_at), 'MMM d, yyyy')}</dd>
               </div>
               {ticket.resolved_at && (
                 <div className="flex justify-between">
-                  <dt className="text-gray-500">Resolved</dt>
-                  <dd>{format(new Date(ticket.resolved_at), 'MMM d, yyyy')}</dd>
+                  <dt className="text-gray-500 dark:text-gray-400">Resolved</dt>
+                  <dd className="text-gray-900 dark:text-gray-100">{format(new Date(ticket.resolved_at), 'MMM d, yyyy')}</dd>
                 </div>
               )}
               {ticket.resolution_time_hours !== null && (
                 <div className="flex justify-between">
-                  <dt className="text-gray-500">Resolution time</dt>
-                  <dd className="font-medium">{ticket.resolution_time_hours}h</dd>
+                  <dt className="text-gray-500 dark:text-gray-400">Resolution time</dt>
+                  <dd className="font-medium text-gray-900 dark:text-gray-100">{ticket.resolution_time_hours}h</dd>
                 </div>
               )}
               {!ticket.ai_processed && (
-                <div className="text-xs text-purple-600 bg-purple-50 p-2 rounded-lg text-center animate-pulse">
+                <div className="text-xs text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 p-2 rounded-lg text-center animate-pulse">
                   AI analysis in progress…
                 </div>
               )}
@@ -282,10 +282,10 @@ export default function TicketDetailPage() {
           {/* Tags */}
           {ticket.tags?.length > 0 && (
             <div className="card">
-              <h3 className="font-semibold text-gray-800 text-sm mb-2">Tags</h3>
+              <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-sm mb-2">Tags</h3>
               <div className="flex flex-wrap gap-1.5">
                 {ticket.tags.map((tag) => (
-                  <span key={tag.id} className="badge bg-gray-100 text-gray-700">
+                  <span key={tag.id} className="badge bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
                     {tag.name}
                   </span>
                 ))}

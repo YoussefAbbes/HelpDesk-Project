@@ -38,19 +38,19 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-900 to-primary-700 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <div className="min-h-screen bg-gradient-to-br from-primary-900 to-primary-700 dark:from-dark-bg dark:to-dark-card flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-dark-card rounded-2xl shadow-2xl w-full max-w-md p-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-primary-900">HelpDesk AI</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-3xl font-bold text-primary-900 dark:text-primary-400">HelpDesk AI</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">
             {isRegister ? 'Create your account' : 'Sign in to your account'}
           </p>
         </div>
 
         {/* Error message */}
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm">
             {typeof error === 'object' ? JSON.stringify(error) : error}
           </div>
         )}
@@ -59,7 +59,7 @@ export default function LoginPage() {
           {isRegister && (
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">First name</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First name</label>
                 <input
                   name="first_name"
                   value={form.first_name}
@@ -69,7 +69,7 @@ export default function LoginPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Last name</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last name</label>
                 <input
                   name="last_name"
                   value={form.last_name}
@@ -82,7 +82,7 @@ export default function LoginPage() {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username</label>
             <input
               name="username"
               value={form.username}
@@ -96,7 +96,7 @@ export default function LoginPage() {
 
           {isRegister && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
               <input
                 name="email"
                 type="email"
@@ -109,7 +109,7 @@ export default function LoginPage() {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
             <input
               name="password"
               type="password"
@@ -125,7 +125,7 @@ export default function LoginPage() {
           {isRegister && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Confirm password
                 </label>
                 <input
@@ -140,7 +140,7 @@ export default function LoginPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Account type</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Account type</label>
                 <select name="role" value={form.role} onChange={handleChange} className="input">
                   <option value="CUSTOMER">Customer</option>
                   <option value="AGENT">Agent</option>
@@ -164,11 +164,11 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
           {isRegister ? 'Already have an account?' : "Don't have an account?"}{' '}
           <button
             onClick={() => { setIsRegister(!isRegister); clearError() }}
-            className="text-primary-600 font-medium hover:underline"
+            className="text-primary-600 dark:text-primary-400 font-medium hover:underline"
           >
             {isRegister ? 'Sign in' : 'Create one'}
           </button>
