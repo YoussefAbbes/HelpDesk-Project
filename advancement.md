@@ -46,7 +46,7 @@ Created reusable, accessible components in `frontend/src/components/ui/`:
 - **Mobile Breakpoints** - < 768px (hamburger), 768-1024px (tablet), > 1024px (desktop)
 - **Responsive Layouts** - Pages stack correctly on mobile
 
-### Phase 5: Backend - Attachments & Notifications (In Progress)
+### Phase 5: Backend - Attachments & Notifications ✓
 
 #### 5.1 Database Models ✓
 - **Attachment Model** - Added to `backend/tickets/models.py`:
@@ -57,8 +57,29 @@ Created reusable, accessible components in `frontend/src/components/ui/`:
   - Tracks: original_filename, file_size, content_type
   - Auto-populates file_size and original_filename on save
 
+- **Notification Model** - Added to `backend/notifications/models.py`:
+  - ForeignKey to User (recipient)
+  - notification_type with TextChoices (TICKET_CREATED, TICKET_ASSIGNED, etc.)
+  - title, message, is_read fields
+  - Optional ForeignKey to Ticket
+  - mark_as_read() method
+  - Indexed on recipient + is_read for performance
+
+- **User Model Extensions** - Added to `backend/users/models.py`:
+  - theme_preference field (LIGHT, DARK, SYSTEM)
+  - email_notifications boolean field
+
 #### 5.2 Notifications App Structure ✓
 - **Backend Directory** - Created `backend/notifications/` app structure
+- **Models (models.py)** ✓ - Notification model with NotificationType choices
+- **Serializers (serializers.py)** ✓ - NotificationSerializer with time_ago helper
+- **Views (views.py)** ✓ - NotificationViewSet with custom actions:
+  - GET /notifications/ - List user notifications
+  - GET /notifications/unread-count/ - Get unread count
+  - POST /notifications/{id}/mark-read/ - Mark one as read
+  - POST /notifications/mark-all-read/ - Mark all as read
+- **URLs (urls.py)** ✓ - DefaultRouter configuration
+- **Apps (apps.py)** ✓ - App config with signal registration in ready()
 - **Signals (signals.py)** ✓ - Auto-create notifications for:
   - Ticket created → notify all agents/admins
   - Ticket assigned → notify assigned agent
@@ -67,29 +88,36 @@ Created reusable, accessible components in `frontend/src/components/ui/`:
   - AI analysis complete → notify assigned agent
 - **Signal Handlers** - Uses pre_save and post_save to track changes
 
-#### 5.3 URL Configuration ✓
+#### 5.3 Attachments Implementation ✓
+- **Serializer (tickets/serializers.py)** ✓ - AttachmentSerializer with:
+  - Nested uploaded_by user details
+  - file_url computed field for absolute URLs
+  - Read-only fields for auto-populated metadata
+- **Views (tickets/views.py)** ✓ - Attachment views:
+  - AttachmentListCreateView - GET/POST /tickets/{id}/attachments/
+  - AttachmentDetailView - GET/DELETE /attachments/{id}/
+  - Permission checks: only uploader or admin can delete
+- **URLs (tickets/urls.py)** ✓ - Added attachment routes
+
+#### 5.4 URL Configuration ✓
 - Added `path('api/v1/notifications/', include('notifications.urls'))` to main urls.py
+- Added attachment endpoints to tickets URLs
 
 ---
 
-## 🔄 In Progress
+## 🔄 Current Status
 
-### Phase 5 Continuation (Backend Completion)
-Currently need to create:
-- [ ] `backend/notifications/models.py` - Notification model with choices for notification types
-- [ ] `backend/notifications/serializers.py` - NotificationSerializer
-- [ ] `backend/notifications/views.py` - NotificationViewSet with mark_read and mark_all_read actions
-- [ ] `backend/notifications/urls.py` - Router registration
-- [ ] `backend/notifications/apps.py` - App configuration with signal registration
-- [ ] `backend/notifications/__init__.py`
-- [ ] Attachment serializer and viewset in `backend/tickets/`
-- [ ] Update `backend/tickets/urls.py` to include attachment routes
-- [ ] Update `backend/users/models.py` to add `theme_preference`, `email_notifications`
-- [ ] Run Django migrations: `makemigrations` and `migrate`
+**Phase 5 Backend - COMPLETED!**
+
+All backend models, serializers, views, and URLs have been implemented. Ready for migrations and testing.
 
 ---
 
 ## 📋 Remaining Work
+
+### Phase 5 Final Steps
+- [ ] Run Django migrations: `docker-compose up backend` will auto-run migrations
+- [ ] Test API endpoints via Postman or frontend integration
 
 ### Phase 6: Frontend Features (Days 10-13)
 
@@ -153,18 +181,22 @@ Currently need to create:
 
 ## 🧪 Testing Plan
 
-**Phase 5 Testing (Backend)**
+**Phase 5 Testing (Backend)** - Ready to Test
 ```bash
-# Run migrations
-python manage.py makemigrations tickets notifications users
-python manage.py migrate
+# Start services (will auto-run migrations)
+docker-compose up -d backend
 
-# Test via Postman/API:
-# - POST /api/v1/tickets/{id}/attachments/
+# Check migrations ran successfully
+docker-compose logs backend | grep migrate
+
+# Test via Postman/API or wait for frontend integration:
+# - POST /api/v1/tickets/{id}/attachments/ (multipart/form-data)
 # - GET /api/v1/tickets/{id}/attachments/
 # - DELETE /api/v1/attachments/{id}/
 # - GET /api/v1/notifications/
+# - GET /api/v1/notifications/unread-count/
 # - POST /api/v1/notifications/{id}/mark-read/
+# - POST /api/v1/notifications/mark-all-read/
 ```
 
 **Phase 6 Testing (Frontend)**
@@ -194,50 +226,54 @@ python manage.py migrate
 | Phase 2: UI Components | ✓ | 2 | Day 3 |
 | Phase 3: Dark Mode | ✓ | 1 | Day 4 |
 | Phase 4: Mobile | ✓ | 2 | Day 6 |
-| Phase 5: Backend | 🔄 In Progress | 3 | Day 9 |
+| Phase 5: Backend | ✓ | 3 | Day 9 |
 | Phase 6: Frontend Features | ⏳ Pending | 4 | Day 13 |
 | Phase 7: Polish | ⏳ Pending | 1 | Day 14 |
 
-**Progress: ~43% Complete** (6 of 14 days conceptually done)
+**Progress: ~64% Complete** (9 of 14 days conceptually done - Phase 5 Backend COMPLETE!)
 
 ---
 
 ## 🚀 Next Steps
 
-1. **Complete backend notifications app** (models, serializers, views, URLs)
-2. **Create attachment serializers and views** in tickets app
-3. **Run migrations** for new models
-4. **Create frontend components** (NotificationDropdown, AttachmentList)
-5. **Create frontend services** (notificationService, attachmentService)
-6. **Create new pages** (ProfilePage, SettingsPage, NotFoundPage)
-7. **Update App.jsx** with new routes
-8. **Add final polish** (animations, micro-interactions)
-9. **Comprehensive testing** across all features
-10. **Deploy and verify** on staging environment
+1. **Test backend API endpoints** (notifications and attachments)
+2. **Create frontend components** (NotificationDropdown, AttachmentList)
+3. **Create frontend services** (notificationService, attachmentService)
+4. **Create new pages** (ProfilePage, SettingsPage, NotFoundPage)
+5. **Update App.jsx** with new routes
+6. **Add final polish** (animations, micro-interactions)
+7. **Comprehensive testing** across all features
+8. **Deploy and verify** on staging environment
 
 ---
 
 ## 📝 Files Modified This Session
 
-**Backend:**
+**Backend (Phase 5 Completion):**
+- `backend/tickets/serializers.py` - Added AttachmentSerializer, updated TicketDetailSerializer
+- `backend/tickets/views.py` - Added AttachmentListCreateView, AttachmentDetailView
+- `backend/tickets/urls.py` - Added attachment routes
+- `backend/users/models.py` - Added theme_preference and email_notifications fields
+- `backend/notifications/models.py` - Already existed (Notification model)
+- `backend/notifications/serializers.py` - Already existed (NotificationSerializer)
+- `backend/notifications/views.py` - Already existed (NotificationViewSet)
+- `backend/notifications/urls.py` - Already existed (router config)
+- `backend/notifications/apps.py` - Already existed (signal registration)
+- `backend/notifications/signals.py` - Already existed (signal handlers)
+
+**Previous Session (Completed):**
 - `backend/tickets/models.py` - Added Attachment model
 - `backend/helpdesk/urls.py` - Added notifications route
-- `backend/notifications/signals.py` - Created signal handlers
-
-**Frontend:**
 - `frontend/src/pages/LoginPage.jsx` - Added dark mode classes
 - `frontend/src/pages/NewTicketPage.jsx` - Added dark mode classes
 - `frontend/src/pages/AnalyticsPage.jsx` - Added dark mode classes
 - `frontend/src/pages/TicketDetailPage.jsx` - Added dark mode classes
 - `frontend/src/pages/TicketsPage.jsx` - Added dark mode classes
-
-**Previous Session (Completed):**
 - `frontend/tailwind.config.js` - Design system tokens
 - `frontend/src/index.css` - Dark mode and component styles
 - `frontend/src/components/ui/` - All 7 UI components
 - `frontend/src/store/themeStore.js` - Theme management
 - `frontend/src/components/MobileMenu.jsx` - Mobile navigation
-- Various page files - Dark mode support
 
 ---
 
@@ -262,10 +298,10 @@ python manage.py migrate
 ## 🔄 Status Summary
 
 ```
-✅ Design System → UI Components → Dark Mode → Mobile → [Backend IN PROGRESS]
+✅ Design System → UI Components → Dark Mode → Mobile → Backend COMPLETE!
                                                             ↓
-Today's Session: Completed Phases 1-4, Started Phase 5
-Next Session: Complete Phase 5 backend, then Phases 6-7
+Today's Session: Completed Phase 5 Backend (Attachments & Notifications)
+Next Session: Phase 6 Frontend Features, then Phase 7 Polish
 ```
 
-**All major architectural decisions completed. Now executing implementation phase by phase.**
+**All Phase 5 backend implementation completed. Ready for migrations and testing via Docker.**
