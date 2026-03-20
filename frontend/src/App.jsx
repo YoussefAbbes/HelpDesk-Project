@@ -20,6 +20,9 @@ import TicketsPage from './pages/TicketsPage'
 import TicketDetailPage from './pages/TicketDetailPage'
 import NewTicketPage from './pages/NewTicketPage'
 import AnalyticsPage from './pages/AnalyticsPage'
+import ProfilePage from './pages/ProfilePage'
+import SettingsPage from './pages/SettingsPage'
+import NotFoundPage from './pages/NotFoundPage'
 
 // ---------------------------------------------------------------------------
 // Route guards
@@ -65,6 +68,8 @@ export default function App() {
           <Route path="/tickets" element={<TicketsPage />} />
           <Route path="/tickets/new" element={<NewTicketPage />} />
           <Route path="/tickets/:id" element={<TicketDetailPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/settings" element={<SettingsPage />} />
 
           {/* Admin-only */}
           <Route element={<AdminRoute />}>
@@ -73,8 +78,8 @@ export default function App() {
         </Route>
       </Route>
 
-      {/* Catch-all */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      {/* Catch-all — 404 */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
 }
